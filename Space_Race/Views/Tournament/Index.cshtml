@@ -1,0 +1,38 @@
+﻿@model IEnumerable<Tournament>
+@{
+    ViewData["Title"] = "All Tournaments";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New Tournament</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Tournament Id</th>
+            <th>Title</th>
+            <th>First Place</th>
+            <th>Second Place</th>
+            <th>Third Place</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.TournamentId</td>
+                <td>@item.Title</td>
+                <td>@item.TourFirstPlace.Name</td>
+                <td>@item.TourSecondPlace.Name</td>
+                <td>@item.TourThirdPlace.Name</td>
+                @* <td>  Not currently needed *@
+                @*     <a asp-action="Delete" asp-route-id="@item.TournamentId" class="btn btn-danger">Delete</a> *@
+                @* </td> *@
+            </tr>
+        }
+    </tbody>
+</table>

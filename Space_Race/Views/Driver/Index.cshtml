@@ -1,0 +1,27 @@
+﻿@model IEnumerable<Driver>
+<h1>All Drivers</h1>
+<p>
+	<a asp-action="Create">Create New Driver</a>
+</p>
+<table class="table">
+	<thead>
+		<tr>
+			<th>Driver Id</th>
+			<th>Driver Name</th>
+			<th>Vehicle Model</th>
+			<th>View Vehicle</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>@item.DriverId</td>
+				<td>@item.Name</td>
+				<td>@item.Vehicle.Model</td>
+				@* <td> Not currently needed*@
+				@* 	<a asp-action="Details" asp-controller="Vehicle" asp-route-id="@item.VehicleId" class="btn btn-info">View Driver</a> *@
+				@* </td> *@
+			</tr>
+		}
+</table>
