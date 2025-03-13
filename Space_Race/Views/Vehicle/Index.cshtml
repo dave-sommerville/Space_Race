@@ -16,13 +16,21 @@
 		@foreach (var item in Model)
 		{
 			<tr>
+				{
 				<td>@item.VehicleId</td>
 				<td>@item.Model</td>
-				<td>@item.Driver.Name</td>
+				<td>@(item.Driver != null ? item.Driver.Name : "No Driver")</td>
 				<td>
-					<a asp-action="Details" asp-controller="Driver" asp-route-id="@item.Driver.DriverId" class="btn btn-info">View Driver</a>
+					@if (item.Driver != null)
+					{
+						<a asp-action="ViewDriver" asp-route-id="@item.Driver.DriverId">View Driver</a>
+					}
+					else
+					{
+						<span>No Driver</span>
+					}
 				</td>
 			</tr>
-		}
+		}	
 	</tobdy>
 </table>

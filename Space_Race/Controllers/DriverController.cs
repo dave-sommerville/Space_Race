@@ -23,20 +23,19 @@ namespace Space_Race.Controllers
         }
         [HttpGet]
         public IActionResult Create()
-        {//Will need access to the VehicleService to populate the dropdown
-            ViewBag.Vehicles = new SelectList(_vehicleService.GetVehicles(), "VehicleId", "Name");
+        {
+            ViewBag.Vehicles = new SelectList(_vehicleService.GetVehicles(), "VehicleId", "Model");
             return View();
         }
         [HttpPost]
-        public IActionResult Create(Driver driver, int selectedVehicle)
+        public IActionResult Create(Driver driver)
         {
             if(ModelState.IsValid)
             {
-                driver.VehicleId = selectedVehicle;
                 _driverService.AddDriver(driver);
                 return RedirectToAction("Index");
             }
-            ViewBag.Vehicles = new SelectList(_vehicleService.GetVehicles(), "VehicleId", "Name");
+            ViewBag.Vehicles = new SelectList(_vehicleService.GetVehicles(), "VehicleId", "Model");
             return View(driver);
         }
         [HttpGet]
@@ -47,7 +46,7 @@ namespace Space_Race.Controllers
             {
                 return NotFound();
             }
-            ViewBag.Vehicles = new SelectList(_vehicleService.GetVehicles(), "VehicleId", "Name");
+            ViewBag.Vehicles = new SelectList(_vehicleService.GetVehicles(), "VehicleId", "Model");
             return View(driver);
         }
         [HttpPost]

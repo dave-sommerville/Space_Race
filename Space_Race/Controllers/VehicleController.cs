@@ -25,14 +25,13 @@ namespace Space_Race.Controllers
         public IActionResult Create()
         {
             ViewBag.Drivers = new SelectList(_driverService.GetDrivers(), "DriverId", "Name");
-            return View();
+            return View(new Vehicle{ Model = string.Empty });
         }
         [HttpPost]
-        public IActionResult Create(Vehicle vehicle, int selectedDriver)
+        public IActionResult Create(Vehicle vehicle)
         {
             if(ModelState.IsValid)
             {
-                vehicle.Driver.DriverId = selectedDriver;
                 _vehicleService.AddVehicle(vehicle);
                 return RedirectToAction("Index");
             }

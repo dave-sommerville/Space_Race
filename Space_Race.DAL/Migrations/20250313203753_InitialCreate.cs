@@ -11,6 +11,19 @@ namespace Space_Race.DAL.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Vehicles",
+                columns: table => new
+                {
+                    VehicleId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Model = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Vehicles", x => x.VehicleId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Drivers",
                 columns: table => new
                 {
@@ -22,6 +35,12 @@ namespace Space_Race.DAL.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Drivers", x => x.DriverId);
+                    table.ForeignKey(
+                        name: "FK_Drivers_Vehicles_VehicleId",
+                        column: x => x.VehicleId,
+                        principalTable: "Vehicles",
+                        principalColumn: "VehicleId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -59,26 +78,6 @@ namespace Space_Race.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Vehicles",
-                columns: table => new
-                {
-                    VehicleId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Model = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    DriverId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Vehicles", x => x.VehicleId);
-                    table.ForeignKey(
-                        name: "FK_Vehicles_Drivers_DriverId",
-                        column: x => x.DriverId,
-                        principalTable: "Drivers",
-                        principalColumn: "DriverId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "TournamentDriver",
                 columns: table => new
                 {
@@ -103,6 +102,13 @@ namespace Space_Race.DAL.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Drivers_VehicleId",
+                table: "Drivers",
+                column: "VehicleId",
+                unique: true,
+                filter: "[VehicleId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_TournamentDriver_TournamentId",
                 table: "TournamentDriver",
                 column: "TournamentId");
@@ -121,13 +127,6 @@ namespace Space_Race.DAL.Migrations
                 name: "IX_Tournaments_TourThirdPlaceId",
                 table: "Tournaments",
                 column: "TourThirdPlaceId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Vehicles_DriverId",
-                table: "Vehicles",
-                column: "DriverId",
-                unique: true,
-                filter: "[DriverId] IS NOT NULL");
         }
 
         /// <inheritdoc />
@@ -137,13 +136,13 @@ namespace Space_Race.DAL.Migrations
                 name: "TournamentDriver");
 
             migrationBuilder.DropTable(
-                name: "Vehicles");
-
-            migrationBuilder.DropTable(
                 name: "Tournaments");
 
             migrationBuilder.DropTable(
                 name: "Drivers");
+
+            migrationBuilder.DropTable(
+                name: "Vehicles");
         }
     }
 }

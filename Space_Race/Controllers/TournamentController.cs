@@ -32,7 +32,6 @@ namespace Space_Race.Controllers
         {
             if (ModelState.IsValid)
             {
-                tournament.Drivers = _driverService.GetDrivers().Where(d => SelectedDriverIds.Contains(d.DriverId)).ToList();
                 _tournamentService.AddTournament(tournament);
                 return RedirectToAction("Index");
             }

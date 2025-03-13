@@ -12,7 +12,7 @@ using Space_Race.DAL;
 namespace Space_Race.DAL.Migrations
 {
     [DbContext(typeof(SpRaceDbContext))]
-    [Migration("20250313151611_InitialCreate")]
+    [Migration("20250313203753_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -42,6 +42,10 @@ namespace Space_Race.DAL.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("DriverId");
+
+                    b.HasIndex("VehicleId")
+                        .IsUnique()
+                        .HasFilter("[VehicleId] IS NOT NULL");
 
                     b.ToTable("Drivers");
                 });
@@ -87,19 +91,12 @@ namespace Space_Race.DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("VehicleId"));
 
-                    b.Property<int?>("DriverId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Model")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
                     b.HasKey("VehicleId");
-
-                    b.HasIndex("DriverId")
-                        .IsUnique()
-                        .HasFilter("[DriverId] IS NOT NULL");
 
                     b.ToTable("Vehicles");
                 });
@@ -117,6 +114,16 @@ namespace Space_Race.DAL.Migrations
                     b.HasIndex("TournamentId");
 
                     b.ToTable("TournamentDriver");
+                });
+
+            modelBuilder.Entity("Space_Race.Models.Driver", b =>
+                {
+                    b.HasOne("Space_Race.Models.Vehicle", "Vehicle")
+                        .WithOne("Driver")
+                        .HasForeignKey("Space_Race.Models.Driver", "VehicleId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Vehicle");
                 });
 
             modelBuilder.Entity("Space_Race.Models.Tournament", b =>
@@ -143,16 +150,6 @@ namespace Space_Race.DAL.Migrations
                     b.Navigation("TourThirdPlace");
                 });
 
-            modelBuilder.Entity("Space_Race.Models.Vehicle", b =>
-                {
-                    b.HasOne("Space_Race.Models.Driver", "Driver")
-                        .WithOne("Vehicle")
-                        .HasForeignKey("Space_Race.Models.Vehicle", "DriverId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("Driver");
-                });
-
             modelBuilder.Entity("TournamentDriver", b =>
                 {
                     b.HasOne("Space_Race.Models.Driver", null)
@@ -168,9 +165,9 @@ namespace Space_Race.DAL.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Space_Race.Models.Driver", b =>
+            modelBuilder.Entity("Space_Race.Models.Vehicle", b =>
                 {
-                    b.Navigation("Vehicle");
+                    b.Navigation("Driver");
                 });
 #pragma warning restore 612, 618
         }

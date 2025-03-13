@@ -18,7 +18,8 @@
 			<tr>
 				<td>@item.DriverId</td>
 				<td>@item.Name</td>
-				<td>@item.Vehicle.Model</td>
+				<td>@(item.Vehicle != null ? item.Vehicle.Model : "No Vehicle")</td>
+
 				@* <td> Not currently needed*@
 				@* 	<a asp-action="Details" asp-controller="Vehicle" asp-route-id="@item.VehicleId" class="btn btn-info">View Driver</a> *@
 				@* </td> *@
