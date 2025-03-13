@@ -32,7 +32,7 @@ namespace Space_Race.Controllers
         {
             if(ModelState.IsValid)
             {
-                vehicle.DriverId = selectedDriver;
+                vehicle.Driver.DriverId = selectedDriver;
                 _vehicleService.AddVehicle(vehicle);
                 return RedirectToAction("Index");
             }

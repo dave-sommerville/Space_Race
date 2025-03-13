@@ -17,8 +17,7 @@ namespace Space_Race.DAL.Migrations
                     DriverId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    VehicleId = table.Column<int>(type: "int", nullable: true),
-                    TournamentId = table.Column<int>(type: "int", nullable: false)
+                    VehicleId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -32,32 +31,31 @@ namespace Space_Race.DAL.Migrations
                     TournamentId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    RaceWinners = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TourFirstPlaceId = table.Column<int>(type: "int", nullable: true),
-                    TourFirstPlaceDriverId = table.Column<int>(type: "int", nullable: true),
                     TourSecondPlaceId = table.Column<int>(type: "int", nullable: true),
-                    TourSecondPlaceDriverId = table.Column<int>(type: "int", nullable: true),
-                    TourThirdPlaceId = table.Column<int>(type: "int", nullable: true),
-                    TourThirdPlaceDriverId = table.Column<int>(type: "int", nullable: true)
+                    TourThirdPlaceId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Tournaments", x => x.TournamentId);
                     table.ForeignKey(
-                        name: "FK_Tournaments_Drivers_TourFirstPlaceDriverId",
-                        column: x => x.TourFirstPlaceDriverId,
+                        name: "FK_Tournaments_Drivers_TourFirstPlaceId",
+                        column: x => x.TourFirstPlaceId,
                         principalTable: "Drivers",
-                        principalColumn: "DriverId");
+                        principalColumn: "DriverId",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Tournaments_Drivers_TourSecondPlaceDriverId",
-                        column: x => x.TourSecondPlaceDriverId,
+                        name: "FK_Tournaments_Drivers_TourSecondPlaceId",
+                        column: x => x.TourSecondPlaceId,
                         principalTable: "Drivers",
-                        principalColumn: "DriverId");
+                        principalColumn: "DriverId",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Tournaments_Drivers_TourThirdPlaceDriverId",
-                        column: x => x.TourThirdPlaceDriverId,
+                        name: "FK_Tournaments_Drivers_TourThirdPlaceId",
+                        column: x => x.TourThirdPlaceId,
                         principalTable: "Drivers",
-                        principalColumn: "DriverId");
+                        principalColumn: "DriverId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -76,28 +74,53 @@ namespace Space_Race.DAL.Migrations
                         name: "FK_Vehicles_Drivers_DriverId",
                         column: x => x.DriverId,
                         principalTable: "Drivers",
-                        principalColumn: "DriverId");
+                        principalColumn: "DriverId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TournamentDriver",
+                columns: table => new
+                {
+                    DriverId = table.Column<int>(type: "int", nullable: false),
+                    TournamentId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TournamentDriver", x => new { x.DriverId, x.TournamentId });
+                    table.ForeignKey(
+                        name: "FK_TournamentDriver_Drivers_DriverId",
+                        column: x => x.DriverId,
+                        principalTable: "Drivers",
+                        principalColumn: "DriverId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TournamentDriver_Tournaments_TournamentId",
+                        column: x => x.TournamentId,
+                        principalTable: "Tournaments",
+                        principalColumn: "TournamentId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Drivers_TournamentId",
-                table: "Drivers",
+                name: "IX_TournamentDriver_TournamentId",
+                table: "TournamentDriver",
                 column: "TournamentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Tournaments_TourFirstPlaceDriverId",
+                name: "IX_Tournaments_TourFirstPlaceId",
                 table: "Tournaments",
-                column: "TourFirstPlaceDriverId");
+                column: "TourFirstPlaceId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Tournaments_TourSecondPlaceDriverId",
+                name: "IX_Tournaments_TourSecondPlaceId",
                 table: "Tournaments",
-                column: "TourSecondPlaceDriverId");
+                column: "TourSecondPlaceId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Tournaments_TourThirdPlaceDriverId",
+                name: "IX_Tournaments_TourThirdPlaceId",
                 table: "Tournaments",
-                column: "TourThirdPlaceDriverId");
+                column: "TourThirdPlaceId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Vehicles_DriverId",
@@ -105,22 +128,13 @@ namespace Space_Race.DAL.Migrations
                 column: "DriverId",
                 unique: true,
                 filter: "[DriverId] IS NOT NULL");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Drivers_Tournaments_TournamentId",
-                table: "Drivers",
-                column: "TournamentId",
-                principalTable: "Tournaments",
-                principalColumn: "TournamentId",
-                onDelete: ReferentialAction.Cascade);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Drivers_Tournaments_TournamentId",
-                table: "Drivers");
+            migrationBuilder.DropTable(
+                name: "TournamentDriver");
 
             migrationBuilder.DropTable(
                 name: "Vehicles");

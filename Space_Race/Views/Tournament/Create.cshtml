@@ -17,7 +17,7 @@
             @foreach (var driver in ViewBag.Drivers)
             {
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="@driver.DriverId" name="Tournament.RaceWinners" />
+                    <input class="form-check-input" type="checkbox" value="@driver.DriverId" name="SelectedDriverIds" />
                     <label class="form-check-label">@driver.Name</label>
                 </div>
             }

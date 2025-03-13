@@ -22,20 +22,40 @@ namespace Space_Race.DAL
             modelBuilder.Entity<Vehicle>()
                 .HasKey(v => v.VehicleId);
 
-            // One-to-many relationship between Tournament and Driver
+            // Many-to-many relationship between Tournament and Driver
             modelBuilder.Entity<Tournament>()
-                .HasMany<Driver>(t => t.Drivers)
-                .WithOne()
-                .HasForeignKey(d => d.TournamentId);
-            // One-to-one relationship between Driver and Vehicle and visa versa
+                .HasMany(t => t.Drivers)
+                .WithMany(d => d.Tournaments)
+                .UsingEntity<Dictionary<string, object>>(
+                    "TournamentDriver",
+                    j => j.HasOne<Driver>().WithMany().HasForeignKey("DriverId"),
+                    j => j.HasOne<Tournament>().WithMany().HasForeignKey("TournamentId"),
+                    j => j.HasKey("DriverId", "TournamentId")
+                );
+            modelBuilder.Entity<Tournament>()
+                .HasOne(t => t.TourFirstPlace)
+                .WithMany()
+                .HasForeignKey(t => t.TourFirstPlaceId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Tournament>()
+                .HasOne(t => t.TourSecondPlace)
+                .WithMany()
+                .HasForeignKey(t => t.TourSecondPlaceId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Tournament>()
+                .HasOne(t => t.TourThirdPlace)
+                .WithMany()
+                .HasForeignKey(t => t.TourThirdPlaceId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // One-to-one relationship between Driver and Vehicle
             modelBuilder.Entity<Driver>()
                 .HasOne(d => d.Vehicle)
                 .WithOne(v => v.Driver)
-                .HasForeignKey<Driver>(d => d.VehicleId);
-            modelBuilder.Entity<Vehicle>()
-                .HasOne(v => v.Driver)
-                .WithOne(d => d.Vehicle)
-                .HasForeignKey<Vehicle>(v => v.DriverId);
+                .HasForeignKey<Driver>(d => d.VehicleId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
 
             // Property constraints
             modelBuilder.Entity<Tournament>()

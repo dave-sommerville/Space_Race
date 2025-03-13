@@ -12,7 +12,11 @@ namespace Space_Race.DAL
         }
         public List<Tournament> GetAllTournaments()
         {
-            return _context.Tournaments.ToList();
+            return _context.Tournaments
+                .Include(t => t.TourFirstPlace)
+                .Include(t => t.TourSecondPlace)
+                .Include(t => t.TourThirdPlace)
+                .ToList();
         }
         public Tournament GetTournamentById(int id)
         {

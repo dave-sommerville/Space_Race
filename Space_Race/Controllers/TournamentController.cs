@@ -18,47 +18,52 @@ namespace Space_Race.Controllers
         public IActionResult Index()
         {
             List<Tournament> tournaments = _tournamentService.GetTournaments();
-            return View();
+            return View(tournaments);
         }
         [HttpGet]
         public IActionResult Create()
         {
-            List<Tournament> tournaments = _tournamentService.GetTournaments();
-            return View();
+            var drivers = _driverService.GetDrivers();
+            ViewBag.Drivers = drivers;
+            return View(new Tournament());
         }
         [HttpPost]
-        public IActionResult Create(Tournament tournament)
+        public IActionResult Create(Tournament tournament, List<int> SelectedDriverIds)
         {
             if (ModelState.IsValid)
             {
+                tournament.Drivers = _driverService.GetDrivers().Where(d => SelectedDriverIds.Contains(d.DriverId)).ToList();
                 _tournamentService.AddTournament(tournament);
                 return RedirectToAction("Index");
             }
-            List<Tournament> tournaments = _tournamentService.GetTournaments();
+            ViewBag.Drivers = _driverService.GetDrivers();
             return View(tournament);
         }
-        [HttpPost]
+        [HttpGet]
         public IActionResult Edit(int id)
         {
             Tournament tournament = _tournamentService.GetTournamentById(id);
-            if(tournament == null)
+            if (tournament == null)
             {
                 return NotFound();
             }
-            List<Tournament> tournaments = _tournamentService.GetTournaments();
+            ViewBag.Drivers = _driverService.GetDrivers();
             return View(tournament);
         }
+
         [HttpPost]
-        public IActionResult Edit(Tournament tournament)
+        public IActionResult Edit(Tournament tournament, List<int> SelectedDriverIds)
         {
             if (ModelState.IsValid)
             {
+                tournament.Drivers = _driverService.GetDrivers().Where(d => SelectedDriverIds.Contains(d.DriverId)).ToList();
                 _tournamentService.UpdateTournament(tournament);
                 return RedirectToAction("Index");
             }
-            List<Tournament> tournaments = _tournamentService.GetTournaments();
+            ViewBag.Drivers = _driverService.GetDrivers();
             return View(tournament);
         }
+
         [HttpPost]
         public IActionResult Delete(int id)
         {
