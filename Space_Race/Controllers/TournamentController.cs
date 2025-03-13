@@ -25,13 +25,20 @@ namespace Space_Race.Controllers
         {
             var drivers = _driverService.GetDrivers();
             ViewBag.Drivers = drivers;
-            return View(new Tournament());
+            return View(new Tournament{ Title = string.Empty });
         }
         [HttpPost]
-        public IActionResult Create(Tournament tournament, List<int> SelectedDriverIds)
+        public IActionResult Create(Tournament tournament, List<int> selectedDriverIds)
         {
+            if(selectedDriverIds == null)
+            {
+                ModelState.AddModelError("Drivers", "At least one driver must be selected.");
+            }
             if (ModelState.IsValid)
             {
+                tournament.Drivers = _driverService.GetDrivers()
+                    .Where(d => selectedDriverIds.Contains(d.DriverId))
+                    .ToList();
                 _tournamentService.AddTournament(tournament);
                 return RedirectToAction("Index");
             }
@@ -46,16 +53,23 @@ namespace Space_Race.Controllers
             {
                 return NotFound();
             }
-            ViewBag.Drivers = _driverService.GetDrivers();
+            var drivers = _driverService.GetDrivers();
+            ViewBag.Drivers = drivers;
             return View(tournament);
         }
 
         [HttpPost]
-        public IActionResult Edit(Tournament tournament, List<int> SelectedDriverIds)
+        public IActionResult Edit(Tournament tournament, List<int> selectedDriverIds)
         {
+            if (selectedDriverIds == null)
+            {
+                ModelState.AddModelError("Drivers", "At least one driver must be selected.");
+            }
             if (ModelState.IsValid)
             {
-                tournament.Drivers = _driverService.GetDrivers().Where(d => SelectedDriverIds.Contains(d.DriverId)).ToList();
+                tournament.Drivers = _driverService.GetDrivers()
+                    .Where(d => selectedDriverIds.Contains(d.DriverId))
+                    .ToList();
                 _tournamentService.UpdateTournament(tournament);
                 return RedirectToAction("Index");
             }

@@ -15,7 +15,8 @@
             @foreach (var driver in ViewBag.Drivers)
             {
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="@driver.DriverId" name="SelectedDriverIds" @(Model.Drivers.Any(d => d.DriverId == driver.DriverId) ? "checked" : "") />
+                    <input class="form-check-input" type="checkbox" value="@driver.DriverId" 
+                    name="selectedDriverIds" @(Model.Drivers.Any(d => d.DriverId == driver.DriverId) ? "checked" : "") />
                     <label class="form-check-label">@driver.Name</label>
                 </div>
             }
