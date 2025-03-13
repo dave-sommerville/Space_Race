@@ -7,11 +7,11 @@
         public List<int> RaceWinners { get; set; }
         public List<Driver> Drivers { get; set; }
         public int? TourFirstPlaceId { get; set; }
-        public int? TourFirstPlace { get; set; }
+        public Driver? TourFirstPlace { get; set; }
         public int? TourSecondPlaceId { get; set; }
-        public int? TourSecondPlace { get; set; }
+        public Driver? TourSecondPlace { get; set; }
         public int? TourThirdPlaceId { get; set; }
-        public int? TourThirdPlace { get; set; }
+        public Driver? TourThirdPlace { get; set; }
 
     }
 }

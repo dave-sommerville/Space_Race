@@ -12,7 +12,7 @@ namespace Space_Race.BLL
         }
         public List<Tournament> GetTournaments()
         {
-            return _tournamentRepository.GetAlTournaments();
+            return _tournamentRepository.GetAllTournaments();
         }
         public Tournament GetTournamentById(int id)
         {

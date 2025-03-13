@@ -26,12 +26,10 @@
             <tr>
                 <td>@item.TournamentId</td>
                 <td>@item.Title</td>
-                <td>@item.TourFirstPlace.Name</td>
-                <td>@item.TourSecondPlace.Name</td>
-                <td>@item.TourThirdPlace.Name</td>
-                @* <td>  Not currently needed *@
-                @*     <a asp-action="Delete" asp-route-id="@item.TournamentId" class="btn btn-danger">Delete</a> *@
-                @* </td> *@
+                <td>@(item.TourFirstPlace?.Name ?? "N/A")</td>
+                <td>@(item.TourSecondPlace?.Name ?? "N/A")</td>
+                <td>@(item.TourThirdPlace?.Name ?? "N/A")</td>
+
             </tr>
         }
     </tbody>

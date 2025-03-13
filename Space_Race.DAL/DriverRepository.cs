@@ -14,6 +14,10 @@ namespace Space_Race.DAL
         {
             return _context.Drivers.ToList();
         }
+        public Driver GetDriverById(int id)
+        {
+            return _context.Drivers.FirstOrDefault(d => d.DriverId == id);
+        }
         public void AddDriver(Driver driver)
         {
             _context.Drivers.Add(driver);

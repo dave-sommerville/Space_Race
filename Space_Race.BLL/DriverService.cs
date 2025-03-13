@@ -12,7 +12,7 @@ namespace Space_Race.BLL
         }
         public List<Driver> GetDrivers()
         {
-            return _driverRepository.GetDrivers();
+            return _driverRepository.GetAllDrivers();
         }
         public Driver GetDriverById(int id)
         {
