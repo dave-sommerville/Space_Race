@@ -12,7 +12,7 @@ using Space_Race.DAL;
 namespace Space_Race.DAL.Migrations
 {
     [DbContext(typeof(SpRaceDbContext))]
-    [Migration("20250313203753_InitialCreate")]
+    [Migration("20250313234739_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />

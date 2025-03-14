@@ -7,7 +7,7 @@ namespace Space_Race.Models
         public int TournamentId { get; set; }
         [Required]
         public string Title { get; set; }
-        public List<Driver> Drivers { get; set; }
+        public List<Driver> Drivers { get; set; } = new List<Driver>();
         public int? TourFirstPlaceId { get; set; }
         public Driver? TourFirstPlace { get; set; }
         public int? TourSecondPlaceId { get; set; }

@@ -16,11 +16,14 @@ namespace Space_Race.DAL
                 .Include(t => t.TourFirstPlace)
                 .Include(t => t.TourSecondPlace)
                 .Include(t => t.TourThirdPlace)
+                .Include(t => t.Drivers)
                 .ToList();
         }
         public Tournament GetTournamentById(int id)
         {
-            return _context.Tournaments.FirstOrDefault(t => t.TournamentId == id);
+            return _context.Tournaments
+                .Include(t => t.Drivers)
+                .FirstOrDefault(t => t.TournamentId == id);
         }
         public void AddTournament(Tournament tournament)
         {

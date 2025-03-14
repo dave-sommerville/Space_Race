@@ -1,36 +1,37 @@
 ﻿@model IEnumerable<Tournament>
-@{
-    ViewData["Title"] = "All Tournaments";
-}
 
-<h1>@ViewData["Title"]</h1>
-
-<p>
-    <a asp-action="Create" class="btn btn-primary">Create New Tournament</a>
-</p>
+<h1>Tournaments</h1>
 
 <table class="table">
     <thead>
         <tr>
-            <th>Tournament Id</th>
             <th>Title</th>
-            <th>First Place</th>
-            <th>Second Place</th>
-            <th>Third Place</th>
-            <th>Actions</th>
+            <th>Drivers</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var tournament in Model)
         {
             <tr>
-                <td>@item.TournamentId</td>
-                <td>@item.Title</td>
-                <td>@(item.TourFirstPlace?.Name ?? "N/A")</td>
-                <td>@(item.TourSecondPlace?.Name ?? "N/A")</td>
-                <td>@(item.TourThirdPlace?.Name ?? "N/A")</td>
-                @* Could add the list of drivers *@
+                <td>@tournament.Title</td>
+                <td>
+                    @foreach (var driver in tournament.Drivers)
+                    {
+                        <span>@driver.Name</span>
+
+                        <br />
+                    }
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@tournament.TournamentId" class="btn btn-primary">Edit</a>
+                    <form asp-action="Delete" asp-route-id="@tournament.TournamentId" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </td>
             </tr>
         }
     </tbody>
 </table>
+<a asp-action="Create" class="btn btn-primary">Create New Tournament</a>
+<a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Home</a>

@@ -14,23 +14,36 @@ namespace Space_Race.Controllers
             _tournamentService = tournamentService;
             _driverService = driverService;
         }
+        [HttpPost]
+        public IActionResult RandomlyAssignDrivers(int id)
+        {
+            var tournament = _tournamentService.GetTournamentById(id);
+            if (tournament == null)
+            {
+                return NotFound();
+            }
+            _tournamentService.RandomlyAssignDrivers(tournament);
+            return RedirectToAction("Edit", new { id = tournament.TournamentId });
+        }
+
         [HttpGet]
         public IActionResult Index()
         {
             List<Tournament> tournaments = _tournamentService.GetTournaments();
             return View(tournaments);
         }
+
         [HttpGet]
         public IActionResult Create()
         {
             var drivers = _driverService.GetDrivers();
             ViewBag.Drivers = drivers;
-            return View(new Tournament{ Title = string.Empty });
+            return View(new Tournament { Title = string.Empty });
         }
         [HttpPost]
         public IActionResult Create(Tournament tournament, List<int> selectedDriverIds)
         {
-            if(selectedDriverIds == null)
+            if (selectedDriverIds == null || !selectedDriverIds.Any())
             {
                 ModelState.AddModelError("Drivers", "At least one driver must be selected.");
             }
@@ -42,7 +55,8 @@ namespace Space_Race.Controllers
                 _tournamentService.AddTournament(tournament);
                 return RedirectToAction("Index");
             }
-            ViewBag.Drivers = _driverService.GetDrivers();
+            var drivers = _driverService.GetDrivers();
+            ViewBag.Drivers = drivers;
             return View(tournament);
         }
         [HttpGet]
@@ -61,7 +75,7 @@ namespace Space_Race.Controllers
         [HttpPost]
         public IActionResult Edit(Tournament tournament, List<int> selectedDriverIds)
         {
-            if (selectedDriverIds == null)
+            if (selectedDriverIds == null || !selectedDriverIds.Any())
             {
                 ModelState.AddModelError("Drivers", "At least one driver must be selected.");
             }
@@ -69,11 +83,13 @@ namespace Space_Race.Controllers
             {
                 tournament.Drivers = _driverService.GetDrivers()
                     .Where(d => selectedDriverIds.Contains(d.DriverId))
+                    .Distinct()
                     .ToList();
                 _tournamentService.UpdateTournament(tournament);
                 return RedirectToAction("Index");
             }
-            ViewBag.Drivers = _driverService.GetDrivers();
+            var drivers = _driverService.GetDrivers();
+            ViewBag.Drivers = drivers;
             return View(tournament);
         }
 

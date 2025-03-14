@@ -6,9 +6,22 @@ namespace Space_Race.BLL
     public class TournamentService
     {
         private readonly TournamentRepository _tournamentRepository;
-        public TournamentService(TournamentRepository tournamentRepository)
+        private readonly DriverService _driverService;
+        public TournamentService(TournamentRepository tournamentRepository, DriverService driverService)
         {
             _tournamentRepository = tournamentRepository;
+            _driverService = driverService;
+        }
+        public void RandomlyAssignDrivers(Tournament tournament)
+        {
+            var drivers = tournament.Drivers.OrderBy(x => Guid.NewGuid()).ToList();
+            if (drivers.Count >= 3)
+            {
+                tournament.TourFirstPlace = drivers[0];
+                tournament.TourSecondPlace = drivers[1];
+                tournament.TourThirdPlace = drivers[2];
+            }
+            _tournamentRepository.UpdateTournament(tournament);
         }
         public List<Tournament> GetTournaments()
         {

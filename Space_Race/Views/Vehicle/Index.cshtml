@@ -1,36 +1,32 @@
 ﻿@model IEnumerable<Vehicle>
 <h1>All Vehicles</h1>
 <p>
-	<a asp-action="Create">Create New Vehicle</a>
+    <a asp-action="Create" class="btn btn-primary">Create New Vehicle</a>
 </p>
 <table class="table">
-	<thead>
-		<tr>
-			<th>Vehicle Id</th>
-			<th>Vehicle Model</th>
-			<th>Driver Name</th>
-			<th>View Driver</th>
-		</tr>
-	</thead>
-	<tobdy>
-		@foreach (var item in Model)
-		{
-			<tr>
-				{
-				<td>@item.VehicleId</td>
-				<td>@item.Model</td>
-				<td>@(item.Driver != null ? item.Driver.Name : "No Driver")</td>
-				<td>
-					@if (item.Driver != null)
-					{
-						<a asp-action="ViewDriver" asp-route-id="@item.Driver.DriverId">View Driver</a>
-					}
-					else
-					{
-						<span>No Driver</span>
-					}
-				</td>
-			</tr>
-		}	
-	</tobdy>
+    <thead>
+        <tr>
+            <th>Vehicle Id</th>
+            <th>Model</th>
+            <th>Driver</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.VehicleId</td>
+                <td>@item.Model</td>
+                <td>@(item.Driver != null ? item.Driver.Name : "No Driver")</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.VehicleId" class="btn btn-primary">Edit</a>
+                    <form asp-action="Delete" asp-route-id="@item.VehicleId" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
 </table>
+<a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Home</a>
