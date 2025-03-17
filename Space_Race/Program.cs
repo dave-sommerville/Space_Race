@@ -32,6 +32,9 @@ namespace Space_Race
             builder.Services.AddScoped<TournamentService>();
             var app = builder.Build();
 
+            // Seed roles and admin user here
+            SeedRolesAndAdminUserAsync(app.Services).GetAwaiter().GetResult();
+
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
@@ -55,5 +58,35 @@ namespace Space_Race
 
             app.Run();
         }
-    }
+        static async Task SeedRolesAndAdminUserAsync(IServiceProvider serviceProvider)
+        {
+            using (IServiceScope scope = serviceProvider.CreateScope())
+            {
+                RoleManager<IdentityRole> roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+                UserManager<IdentityUser> userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+
+                // Define roles
+                string[] roles = { "Admin", "User" };
+                foreach (string role in roles)
+                {
+                    if (!await roleManager.RoleExistsAsync(role))
+                    {
+                        await roleManager.CreateAsync(new IdentityRole(role));
+                    }
+                }
+
+                // Create an admin user
+                IdentityUser adminUser = new IdentityUser
+                {
+                    UserName = "admin@mail.com",
+                    Email = "admin@mail.com",
+                    EmailConfirmed = true
+                };
+                if (await userManager.FindByEmailAsync(adminUser.Email) == null)
+                {
+                    await userManager.CreateAsync(adminUser, "AdminPassword123!");
+                    await userManager.AddToRoleAsync(adminUser, "Admin");
+                }
+            }
+        }
 }

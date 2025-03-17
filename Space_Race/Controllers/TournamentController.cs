@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Space_Race.BLL;
 using Space_Race.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Space_Race.Controllers
@@ -9,11 +12,22 @@ namespace Space_Race.Controllers
     {
         private readonly TournamentService _tournamentService;
         private readonly DriverService _driverService;
-        public TournamentController(TournamentService tournamentService, DriverService driverService)
+        private readonly UserManager<IdentityUser> _userManager;
+
+        public TournamentController(TournamentService tournamentService, DriverService driverService, UserManager<IdentityUser> userManager)
         {
             _tournamentService = tournamentService;
             _driverService = driverService;
+            _userManager = userManager;
         }
+
+        [Authorize]
+        public IActionResult Index()
+        {
+            List<Tournament> tournaments = _tournamentService.GetTournaments();
+            return View(tournaments);
+        }
+
         [HttpPost]
         public IActionResult RandomlyAssignDrivers(int id)
         {
@@ -27,16 +41,9 @@ namespace Space_Race.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Create()
         {
-            List<Tournament> tournaments = _tournamentService.GetTournaments();
-            return View(tournaments);
-        }
-
-        [HttpGet]
-        public IActionResult Create()
-        {
-            var drivers = _driverService.GetDrivers();
+            var drivers = await _userManager.GetDrivers();
             ViewBag.Drivers = drivers;
             return View(new Tournament { Title = string.Empty });
         }
