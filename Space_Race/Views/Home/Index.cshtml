@@ -1,17 +1,55 @@
-﻿@{
+﻿@model HomeIndexViewModel
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<div class="container mt-5">
+    <div class="text-center">
+        <h1 class="display-4 fw-bold">Welcome</h1>
+        <p class="lead">
+            Learn about <a href="https://learn.microsoft.com/aspnet/core" target="_blank">building Web apps with ASP.NET Core</a>.
+        </p>
+    </div>
 
-<div class="text-center">
-    <h2>Navigation</h2>
-    <p>
-        <a asp-controller="Tournament" asp-action="Index" class="btn btn-primary">Tournaments</a>
-        <a asp-controller="Driver" asp-action="Index" class="btn btn-primary">Drivers</a>
-        <a asp-controller="Vehicle" asp-action="Index" class="btn btn-primary">Vehicles</a>
-    </p>
+    <div class="row justify-content-center mt-4">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <h2 class="card-title">Statistics</h2>
+                    <div class="row mt-3">
+                        <div class="col-md-4">
+                            <h5 class="text-primary">Tournaments</h5>
+                            <p class="fw-bold">@Model.TournamentCount</p>
+                        </div>
+                        <div class="col-md-4">
+                            <h5 class="text-success">Drivers</h5>
+                            <p class="fw-bold">@Model.DriverCount</p>
+                        </div>
+                        <div class="col-md-4">
+                            <h5 class="text-danger">Vehicles</h5>
+                            <p class="fw-bold">@Model.VehicleCount</p>
+                        </div>
+                    </div>
+
+                    <h3 class="mt-4">Top Drivers</h3>
+                    <ul class="list-group list-group-flush">
+                        @foreach (var driver in Model.NumberOneDrivers)
+                        {
+                            <li class="list-group-item">@driver.Name</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center mt-4">
+        <h2>Navigation</h2>
+        <div class="btn-group mt-2">
+            <a asp-controller="Tournament" asp-action="Index" class="btn btn-outline-primary">Tournaments</a>
+            <a asp-controller="Driver" asp-action="Index" class="btn btn-outline-success">Drivers</a>
+            <a asp-controller="Vehicle" asp-action="Index" class="btn btn-outline-danger">Vehicles</a>
+        </div>
+    </div>
 </div>

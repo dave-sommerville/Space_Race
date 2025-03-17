@@ -23,6 +23,20 @@ namespace Space_Race.BLL
             }
             _tournamentRepository.UpdateTournament(tournament);
         }
+        public int GetTournamentCount()
+        {
+            return _tournamentRepository.GetAllTournaments().Count;
+        }
+
+        public List<Driver> GetNumberOneDrivers()
+        {
+            return _tournamentRepository.GetAllTournaments()
+                .Where(t => t.TourFirstPlace != null)
+                .Select(t => t.TourFirstPlace)
+                .Distinct()
+                .ToList();
+        }
+
         public List<Tournament> GetTournaments()
         {
             return _tournamentRepository.GetAllTournaments();

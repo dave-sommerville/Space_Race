@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Space_Race.DAL;
 using Space_Race.BLL;
+using Microsoft.AspNetCore.Identity;
 
 namespace Space_Race
 {
@@ -18,6 +19,10 @@ namespace Space_Race
             // Configure DbContext with SQL Server
             builder.Services.AddDbContext<SpRaceDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddRoles<IdentityRole>() // Add support for roles
+                .AddEntityFrameworkStores<SpRaceDbContext>();
+
 
             builder.Services.AddScoped<DriverRepository>();
             builder.Services.AddScoped<DriverService>();
@@ -40,11 +45,13 @@ namespace Space_Race
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
+            app.MapRazorPages();
 
             app.Run();
         }

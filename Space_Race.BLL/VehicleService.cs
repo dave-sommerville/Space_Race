@@ -18,6 +18,11 @@ namespace Space_Race.BLL
         {
             return _vehicleRepository.GetVehicleById(id);
         }
+        public int GetVehicleCount()
+        {
+            return _vehicleRepository.GetAllVehicles().Count;
+        }
+
         public void AddVehicle(Vehicle vehicle)
         {
             if(string.IsNullOrWhiteSpace(vehicle.Model))

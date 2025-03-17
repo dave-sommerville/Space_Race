@@ -7,7 +7,10 @@
         <tr>
             <th>Title</th>
             <th>Drivers</th>
-            <th></th>
+            <th>First Place</th>
+            <th>Second Place</th>
+            <th>Third Place</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -23,10 +26,16 @@
                         <br />
                     }
                 </td>
+                <td>@(tournament.TourFirstPlace != null ? tournament.TourFirstPlace.Name : "N/A")</td>
+                <td>@(tournament.TourSecondPlace != null ? tournament.TourSecondPlace.Name : "N/A")</td>
+                <td>@(tournament.TourThirdPlace != null ? tournament.TourThirdPlace.Name : "N/A")</td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@tournament.TournamentId" class="btn btn-primary">Edit</a>
                     <form asp-action="Delete" asp-route-id="@tournament.TournamentId" method="post" style="display:inline;">
                         <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                    <form asp-action="RandomlyAssignDrivers" asp-route-id="@tournament.TournamentId" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-warning">Run Race</button>
                     </form>
                 </td>
             </tr>

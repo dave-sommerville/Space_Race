@@ -3,10 +3,54 @@ using Space_Race.BLL;
 using Space_Race.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Diagnostics.Contracts;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace Space_Race.Controllers
-{
-    public class DriverController : Controller
+{@*
+    private readonly BandService _bandService;
+
+    //this constructor is for before roles **********************
+    //public BandController(BandService bandService) {
+    //    _bandService = bandService;
+    //}
+    [Authorize]
+    public IActionResult Index()
+    {
+        var bands = _bandService.GetBands();
+        return View(bands);
+    }
+
+
+    // roles only *****************
+    private readonly UserManager<IdentityUser> _userManager;
+    public BandController(BandService bandService, UserManager<IdentityUser> userManager)
+    {
+        _bandService = bandService;
+        _userManager = userManager;
+    }
+
+    [Authorize(Roles = "Admin")] // Admin-only acces@
+    public async Task<IActionResult> ViewAllUsers()
+    {
+        var users = await _userManager.Users.ToListAsync();
+        var userWithRoles = new List<UserWithRolesViewModel>();
+
+        foreach (var user in users)
+        {
+            var roles = await _userManager.GetRolesAsync(user);
+            userWithRoles.Add(new UserWithRolesViewModel
+            {
+                UserName = user.UserName,
+                Email = user.Email,
+                Roles = roles
+            });
+        }
+
+        return View(userWithRoles);
+    }
+}*@
+public class DriverController : Controller
     {
         private readonly DriverService _driverService;
         private readonly VehicleService _vehicleService;

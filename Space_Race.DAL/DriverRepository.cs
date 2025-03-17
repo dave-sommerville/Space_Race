@@ -12,7 +12,9 @@ namespace Space_Race.DAL
         }
         public List<Driver> GetAllDrivers()
         {
-            return _context.Drivers.ToList();
+            return _context.Drivers
+                .Include(d => d.Vehicle)
+                .ToList();
         }
         public Driver GetDriverById(int id)
         {

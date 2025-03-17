@@ -1,9 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Space_Race.Models;
 
 namespace Space_Race.DAL
 {
-    public class SpRaceDbContext : DbContext
+    public class SpRaceDbContext : IdentityDbContext<IdentityUser>
     {
         public SpRaceDbContext(DbContextOptions<SpRaceDbContext> options) : base(options)
         {
@@ -14,6 +16,7 @@ namespace Space_Race.DAL
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             // Primary Keys
             modelBuilder.Entity<Tournament>()
                 .HasKey(t => t.TournamentId);

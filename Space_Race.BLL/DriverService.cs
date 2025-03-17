@@ -18,6 +18,11 @@ namespace Space_Race.BLL
         {
             return _driverRepository.GetDriverById(id);
         }
+        public int GetDriverCount()
+        {
+            return _driverRepository.GetAllDrivers().Count;
+        }
+
         public void AddDriver(Driver driver)
         {
             if(string.IsNullOrWhiteSpace(driver.Name))
