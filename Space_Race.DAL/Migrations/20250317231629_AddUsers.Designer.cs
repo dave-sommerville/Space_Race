@@ -12,8 +12,8 @@ using Space_Race.DAL;
 namespace Space_Race.DAL.Migrations
 {
     [DbContext(typeof(SpRaceDbContext))]
-    [Migration("20250317153348_AddIdentityTables")]
-    partial class AddIdentityTables
+    [Migration("20250317231629_AddUsers")]
+    partial class AddUsers
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

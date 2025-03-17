@@ -17,18 +17,21 @@ public class DriverController : Controller
             _driverService = driverService;
             _vehicleService = vehicleService;
         }
+        [Authorize]
         [HttpGet]
         public IActionResult Index()
         {
             List<Driver> drivers = _driverService.GetDrivers();
             return View(drivers);
         }
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult Create()
         {
             ViewBag.Vehicles = new SelectList(_vehicleService.GetVehicles(), "VehicleId", "Model");
             return View();
         }
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult Create(Driver driver)
         {
@@ -40,6 +43,7 @@ public class DriverController : Controller
             ViewBag.Vehicles = new SelectList(_vehicleService.GetVehicles(), "VehicleId", "Model");
             return View(driver);
         }
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult Edit(int id)
         {
@@ -51,6 +55,7 @@ public class DriverController : Controller
             ViewBag.Vehicles = new SelectList(_vehicleService.GetVehicles(), "VehicleId", "Model");
             return View(driver);
         }
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult Edit(Driver driver)
         {
@@ -62,6 +67,7 @@ public class DriverController : Controller
             ViewBag.Vehicles = new SelectList(_vehicleService.GetVehicles(), "VehicleId", "Name");
             return View(driver);
         }
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult Delete(int id)
         {

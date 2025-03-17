@@ -13,21 +13,21 @@ namespace Space_Race.Controllers
         private readonly TournamentService _tournamentService;
         private readonly DriverService _driverService;
         private readonly UserManager<IdentityUser> _userManager;
-
+        
         public TournamentController(TournamentService tournamentService, DriverService driverService, UserManager<IdentityUser> userManager)
         {
             _tournamentService = tournamentService;
             _driverService = driverService;
             _userManager = userManager;
         }
-
         [Authorize]
+        [HttpGet]
         public IActionResult Index()
         {
             List<Tournament> tournaments = _tournamentService.GetTournaments();
             return View(tournaments);
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult RandomlyAssignDrivers(int id)
         {
@@ -39,14 +39,16 @@ namespace Space_Race.Controllers
             _tournamentService.RandomlyAssignDrivers(tournament);
             return RedirectToAction("Edit", new { id = tournament.TournamentId });
         }
+        [Authorize(Roles = "Admin")]
 
         [HttpGet]
-        public async Task<IActionResult> Create()
+        public  IActionResult Create()
         {
-            var drivers = await _userManager.GetDrivers();
+            var drivers = _driverService.GetDrivers();
             ViewBag.Drivers = drivers;
             return View(new Tournament { Title = string.Empty });
         }
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult Create(Tournament tournament, List<int> selectedDriverIds)
         {
@@ -66,6 +68,7 @@ namespace Space_Race.Controllers
             ViewBag.Drivers = drivers;
             return View(tournament);
         }
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult Edit(int id)
         {
@@ -78,7 +81,7 @@ namespace Space_Race.Controllers
             ViewBag.Drivers = drivers;
             return View(tournament);
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult Edit(Tournament tournament, List<int> selectedDriverIds)
         {
@@ -99,7 +102,7 @@ namespace Space_Race.Controllers
             ViewBag.Drivers = drivers;
             return View(tournament);
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult Delete(int id)
         {
